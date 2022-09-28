@@ -12,18 +12,44 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import forgotApi from "../../api/forgotApi";
+
+
+
 
 const theme = createTheme();
 
 export default function ForgotPassword() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get("email"),
+  //   });
+  // };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    onSubmit: (values) => {
+      handleForgot(values);
+    },
+  });
 
-    });
-  };
+  const navigate = useNavigate()
+    
+    const handleForgot = async (user) => {
+        try {
+            const response = await forgotApi.post(user);
+            const value = response.data.data
+            navigate('/')
+        } catch (error) {
+            let messError = 'User with that email already exists'
+            window.alert(messError)
+        }
+    }
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,7 +90,7 @@ export default function ForgotPassword() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -76,6 +102,8 @@ export default function ForgotPassword() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={formik.handleChange}
+                value={formik.values.email}
               />
               <Button
                 type="submit"
@@ -86,7 +114,7 @@ export default function ForgotPassword() {
                 FORGOT PASSWORD
               </Button>
               <Grid container>
-                <Grid item >
+                <Grid item>
                   <Link href="/" variant="body2">
                     {"Already have an account? Sign In"}
                   </Link>

@@ -12,18 +12,45 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import loginApi from "../../api/loginApi";
+
+
 
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get("email"),
+  //     password: data.get("password"),
+  //   });
+  // };
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+      email: "",
+    },
+    onSubmit: (values) => {
+      handleLogin(values);
+  }
+  });
+
+  const navigate = useNavigate()
+    
+    const handleLogin = async (user) => {
+        try {
+            const response = await loginApi.post(user);
+            const value = response.data.data
+            navigate('play')
+        } catch (error) {
+            let messError = 'Email or password incorrect'
+            window.alert(messError)
+        }
+    }
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,7 +91,7 @@ export default function Login() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -76,6 +103,8 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={formik.handleChange}
+                value={formik.values.email}
               />
               <TextField
                 margin="normal"
@@ -86,6 +115,8 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -105,7 +136,7 @@ export default function Login() {
                     Forgot password?
                   </Link>
                 </Grid>
-                <Grid item >
+                <Grid item>
                   <Link href="register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>

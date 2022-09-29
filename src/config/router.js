@@ -1,7 +1,7 @@
 import Login from "../components/Login/Login";
 import Register from "../components/Register/Register";
 import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
-import MenuAppBar from "../components/Play/Play"
+import Play from "../components/Play/Play"
 
 
 const Router = [
@@ -19,7 +19,7 @@ const Router = [
   },
   {
     path: "play",
-    component: <MenuAppBar/>,
+    component: <Play/>,
   }
 ];
 

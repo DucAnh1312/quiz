@@ -10,13 +10,14 @@ import {
   RadioGroup,
   Typography,
   Checkbox,
+  Box,
 } from "@mui/material";
 import { display, flexbox } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import questionImage from "../../../assets/questionImage.jpg"
+import questionImage from "../../../assets/questionImage.jpg";
 
 export default function CardQuestion() {
   const listQuestion = useSelector((state) => state.question.questionsPlay);
@@ -99,29 +100,20 @@ export default function CardQuestion() {
       />
       <CardContent>
         <Grid container spacing={2} sx={{ marginTop: 2 }}>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="female"
-            name="radio-buttons-group"
-            sx={{ width: "90%", marginLeft: 'auto', marginRight: 'auto' }}
-            onChange={(event, value) => {
-              console.log(value);
-            }}
-          >
+          <Box sx={{ width: "90%", marginLeft: "auto", marginRight: "auto" }}>
             {question.answers.map((answer) => {
               return (
                 <Grid
                   key={answer.id}
-                  item
                   sx={{
-                    marginLeft: "3px",
-                    paddingLeft: "4px",
-                    textAlign: "left",
-                    backgroundColor: "#DADADA",
+                    paddingLeft: "5px",
+                    backgroundColor: "#E9E9E9",
                     maxHeight: "31%",
-                    marginTop: "5px",
-                    borderStyle: "solid",
-                    borderRadius: "10px",
+                    marginTop: "12px",
+                    borderRadius: "5px",
+                    border: "1px solid",
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                   }}
                 >
                   <FormControlLabel
@@ -132,25 +124,24 @@ export default function CardQuestion() {
                 </Grid>
               );
             })}
-          </RadioGroup>
+          </Box>
         </Grid>
       </CardContent>
-      <div className="actionQuestion">
-        <CardActions
-          sx={{
-            justifyContent: "center",
+
+      <CardActions
+        sx={{
+          justifyContent: "center",
+        }}
+      >
+        <Pagination
+          count={listQuestion.length}
+          color="primary"
+          defaultPage={1}
+          onChange={(event, questionNumber) => {
+            changeQuestion(questionNumber);
           }}
-        >
-          <Pagination
-            count={listQuestion.length}
-            color="primary"
-            defaultPage={1}
-            onChange={(event, questionNumber) => {
-              changeQuestion(questionNumber);
-            }}
-          />
-        </CardActions>
-      </div>
+        />
+      </CardActions>
     </Card>
   );
 }

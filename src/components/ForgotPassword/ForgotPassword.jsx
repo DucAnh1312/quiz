@@ -14,21 +14,12 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import forgotApi from "../../api/forgotApi";
-
-
-
+import { forgotApi } from "../../api/api";
 
 const theme = createTheme();
 
 export default function ForgotPassword() {
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //   });
-  // };
+ 
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -38,18 +29,18 @@ export default function ForgotPassword() {
     },
   });
 
-  const navigate = useNavigate()
-    
-    const handleForgot = async (user) => {
-        try {
-            const response = await forgotApi.post(user);
-            const value = response.data.data
-            navigate('/')
-        } catch (error) {
-            let messError = 'User with that email already exists'
-            window.alert(messError)
-        }
+  const navigate = useNavigate();
+
+  const handleForgot = async (user) => {
+    try {
+      const response = await forgotApi.post(user);
+      const value = response.data.data;
+      navigate("/");
+    } catch (error) {
+      let messError = "User with that email already exists";
+      window.alert(messError);
     }
+  };
 
   return (
     <ThemeProvider theme={theme}>

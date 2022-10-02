@@ -12,43 +12,33 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import registerApi from "../../api/registerApi";
+import { registerApi } from "../../api/api";
 
 const theme = createTheme();
 
 export default function Register() {
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //     password: data.get("password"),
-  //     name: data.get("name"),
-  //   });
-  // };
-
   const formik = useFormik({
     initialValues: {
       email: "",
       name: "",
-      password: ""
+      password: "",
     },
     onSubmit: (values) => {
       handleRegister(values);
-  }
+    },
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const handleRegister = async (user) => {
-        try {
-            const response = await registerApi.post(user);
-            const value = response.data.data
-            navigate('/')
-        } catch (error) {
-            window.alert(error)
-        }
+  const handleRegister = async (user) => {
+    try {
+      const response = await registerApi.post(user);
+      const value = response.data.data;
+      navigate("/");
+    } catch (error) {
+      window.alert(error);
     }
+  };
 
   return (
     <ThemeProvider theme={theme}>

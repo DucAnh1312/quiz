@@ -1,7 +1,8 @@
 import Login from "../components/Login/Login";
 import Register from "../components/Register/Register";
 import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
-import Play from "../components/Play/Play"
+import GetListQuestion from "../components/Play/Child/GetListQuestion";
+import Play from "../components/Play/Main/Play"
 
 
 const Router = [
@@ -16,6 +17,10 @@ const Router = [
   {
     path: "forgot",
     component: <ForgotPassword />,
+  },
+  {
+    path: "getlistquestion",
+    component: <GetListQuestion/>
   },
   {
     path: "play",

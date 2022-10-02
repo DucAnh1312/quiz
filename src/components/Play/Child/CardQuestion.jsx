@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import questionImage from "../../../assets/questionImage.jpg"
+
 export default function CardQuestion() {
   const listQuestion = useSelector((state) => state.question.questionsPlay);
   const [question, setQuestion] = useState(listQuestion[0]);
@@ -82,7 +84,7 @@ export default function CardQuestion() {
 
       <CardMedia
         component="img"
-        image={question.thumbnail_link}
+        image={question.thumbnail_link || `${questionImage}`}
         alt="No Image"
         sx={{
           display: "block",
@@ -101,7 +103,7 @@ export default function CardQuestion() {
             aria-labelledby="demo-radio-buttons-group-label"
             defaultValue="female"
             name="radio-buttons-group"
-            sx={{ width: "70%", marginLeft: "15%" }}
+            sx={{ width: "90%", marginLeft: 'auto', marginRight: 'auto' }}
             onChange={(event, value) => {
               console.log(value);
             }}
@@ -111,12 +113,11 @@ export default function CardQuestion() {
                 <Grid
                   key={answer.id}
                   item
-                  xs={6}
                   sx={{
                     marginLeft: "3px",
                     paddingLeft: "4px",
                     textAlign: "left",
-                    backgroundColor: "#FBAB02",
+                    backgroundColor: "#DADADA",
                     maxHeight: "31%",
                     marginTop: "5px",
                     borderStyle: "solid",

@@ -1,14 +1,15 @@
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Container from "@mui/material/Container";
 
-import MenuAppBar from "../../Header/Header";
+import MenuAppBar from "../../Header/MenuAppBar";
 import {questionApi} from "../../../api/api";
 import { updateQuestionsPlay } from "../../../store/questionSlice";
 
 
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
@@ -16,14 +17,19 @@ import { useFormik } from "formik";
 export default function GetListQuestion() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const getQuestions = async (number) => {
+    setLoading(true);
+
     try {
       const response = await questionApi.getQuestionsPlay(number);
       const action = updateQuestionsPlay(response.data.data);
       dispatch(action);
       navigate("../play");
     } catch (error) {}
+    setLoading(false);
+
   };
 
   const formik = useFormik({
@@ -65,16 +71,18 @@ export default function GetListQuestion() {
               onChange={formik.handleChange}
               value={formik.values.number}
               type="number"
+              InputProps={{ inputProps: { min: 0} }}
             />
 
-            <Button
+            <LoadingButton
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              loading={loading}
             >
               GET START
-            </Button>
+            </LoadingButton>
           </Box>
         </Box>
       </Container>

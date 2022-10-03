@@ -1,9 +1,6 @@
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -12,6 +9,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 import { useState } from "react";
 import { useFormik } from "formik";
@@ -24,9 +22,11 @@ import loginImage from "../../assets/loginImage.jpg";
 const theme = createTheme();
 
 export default function Login() {
-  const [loginStatus, setLoginStatus] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(false);
 
+  // formik
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -37,18 +37,30 @@ export default function Login() {
     },
   });
 
+  // login
   const handleLogin = async (user) => {
+    setLoading(true);
+
     try {
       const response = await loginApi.post(user);
       const value = response.data.data;
       // console.log(value);
+
+      // add cookie
       setCookies("ACCESS_TOKEN", value.tokens.access_token.access_token);
       setCookies("REFRESH_TOKEN", value.tokens.refresh_token.refresh_token);
-      navigate("getlistquestion");
+
+      if (response.data.data.user.roles.length >= 2) {
+        navigate("admin");
+      } else {
+        navigate("getlistquestion");
+      }
     } catch (error) {
       setLoginStatus(true);
     }
+    setLoading(false);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -125,18 +137,16 @@ export default function Login() {
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
+              <LoadingButton
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                loading={loading}
               >
                 Sign In
-              </Button>
+              </LoadingButton>
+
               <Grid container>
                 <Grid item xs>
                   <Link href="forgot" variant="body2">

@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,15 +7,23 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import { useFormik } from "formik";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { registerApi } from "../../api/api";
 
 const theme = createTheme();
 
 export default function Register() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  // formik
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -28,9 +35,10 @@ export default function Register() {
     },
   });
 
-  const navigate = useNavigate();
-
+  // register
   const handleRegister = async (user) => {
+    setLoading(true);
+
     try {
       const response = await registerApi.post(user);
       const value = response.data.data;
@@ -38,6 +46,7 @@ export default function Register() {
     } catch (error) {
       window.alert(error);
     }
+    setLoading(false);
   };
 
   return (
@@ -118,14 +127,15 @@ export default function Register() {
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
-              <Button
+              <LoadingButton
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                loading={loading}
               >
                 Sign UP
-              </Button>
+              </LoadingButton>
               <Grid container>
                 <Grid item>
                   <Link href="/" variant="body2">

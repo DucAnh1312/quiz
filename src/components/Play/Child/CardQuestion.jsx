@@ -6,13 +6,13 @@ import {
   FormControlLabel,
   Grid,
   Pagination,
-  Radio,
-  RadioGroup,
   Typography,
   Checkbox,
   Box,
+  Button,
 } from "@mui/material";
-import { display, flexbox } from "@mui/system";
+// import { LoadingButton } from "@mui/lab";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -142,6 +142,21 @@ export default function CardQuestion() {
           }}
         />
       </CardActions>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          // loading={loading}
+          variant="contained"
+          type="submit"
+          sx={{ mt: 3, mb: 5, width: "40%" }}
+        >
+          Submit
+        </Button>
+      </Box>
     </Card>
   );
 }

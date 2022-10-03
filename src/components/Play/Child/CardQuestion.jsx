@@ -152,7 +152,7 @@ export default function CardQuestion() {
           // loading={loading}
           variant="contained"
           type="submit"
-          sx={{ mt: 3, mb: 5, width: "40%" }}
+          sx={{ mt: 3, mb: 5, width: "35%" }}
         >
           Submit
         </Button>

@@ -44,11 +44,15 @@ export default function Login() {
     try {
       const response = await loginApi.post(user);
       const value = response.data.data;
-      // console.log(value);
 
-      // add cookie
-      setCookies("ACCESS_TOKEN", value.tokens.access_token.access_token);
-      setCookies("REFRESH_TOKEN", value.tokens.refresh_token.refresh_token);
+      localStorage.setItem(
+        "ACCESS_TOKEN",
+        value.tokens.access_token.access_token
+      );
+      localStorage.setItem(
+        "REFRESH_TOKEN",
+        value.tokens.refresh_token.refresh_token
+      );
 
       if (response.data.data.user.roles.length >= 2) {
         navigate("admin");

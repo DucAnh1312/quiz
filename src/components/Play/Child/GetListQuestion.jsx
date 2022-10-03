@@ -34,7 +34,7 @@ export default function GetListQuestion() {
 
   const formik = useFormik({
     initialValues: {
-      number: 0,
+      number: "",
     },
     onSubmit: (values) => {
       // console.log(values.number);

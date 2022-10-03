@@ -4,15 +4,14 @@ import Typography from "@mui/material/Typography";
 
 import { useNavigate } from "react-router-dom";
 
-
 import GetListQuestion from "../Play/Child/GetListQuestion";
 
 export default function Admin() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const handleClickManagement =() => {
-        navigate('/admin/management')
-    }
+  const handleClickManagement = () => {
+    navigate("/admin/management");
+  };
   return (
     <>
       <GetListQuestion />
@@ -20,8 +19,9 @@ export default function Admin() {
         <Typography component="h1" variant="h6">
           Administrator Access
         </Typography>
-        <Button sx={{ margin: 1 }}
-        onClick={handleClickManagement}>MANAGEMENT SCREENS</Button>
+        <Button sx={{ margin: 1 }} onClick={handleClickManagement}>
+          MANAGEMENT SCREENS
+        </Button>
       </Box>
     </>
   );

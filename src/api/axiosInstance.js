@@ -1,24 +1,24 @@
-import Cookies from "universal-cookie";
+// import Cookies from "universal-cookie";
 
-const cookies = new Cookies();
+// const cookies = new Cookies();
 
-export const setCookies = (name, value) => {
-  let datenow = new Date();
-  let expiry = new Date();
-  if (name === "ACCESS_TOKEN") {
-    expiry.setSeconds(datenow.getSeconds() + 3600);
-  } else if (name === "REFRESH_TOKEN") {
-    expiry.setDate(datenow.getDate() + 7);
-  }
+// export const setCookies = (name, value) => {
+//   let datenow = new Date();
+//   let expiry = new Date();
+//   if (name === "ACCESS_TOKEN") {
+//     expiry.setSeconds(datenow.getSeconds() + 3600);
+//   } else if (name === "REFRESH_TOKEN") {
+//     expiry.setDate(datenow.getDate() + 7);
+//   }
 
-  cookies.set(name, value, { path: "/", expires: expiry });
-};
-export const getCookies = (name) => {
-  return cookies.get(name);
-};
+//   cookies.set(name, value, { path: "/", expires: expiry });
+// };
+// export const getCookies = (name) => {
+//   return cookies.get(name);
+// };
 
-export const removeCookies = (listName) => {
-  listName.map((value) => {
-    cookies.remove(value);
-  });
-};
+// export const removeCookies = (listName) => {
+//   listName.map((value) => {
+//     cookies.remove(value);
+//   });
+// };

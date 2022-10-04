@@ -5,9 +5,9 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Container from "@mui/material/Container";
 
 import MenuAppBar from "../../Header/MenuAppBar";
-import {questionApi} from "../../../api/api";
+import { questionApi } from "../../../api/api";
 import { updateQuestionsPlay } from "../../../store/questionSlice";
-
+import { data } from "../../Play/Child/CardQuestion";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,12 +24,13 @@ export default function GetListQuestion() {
 
     try {
       const response = await questionApi.getQuestionsPlay(number);
+      // const dataQuestion = response.data.data;
+      // data(dataQuestion);
       const action = updateQuestionsPlay(response.data.data);
       dispatch(action);
       navigate("../play");
     } catch (error) {}
     setLoading(false);
-
   };
 
   const formik = useFormik({
@@ -71,7 +72,7 @@ export default function GetListQuestion() {
               onChange={formik.handleChange}
               value={formik.values.number}
               type="number"
-              InputProps={{ inputProps: { min: 0} }}
+              InputProps={{ inputProps: { min: 0 } }}
             />
 
             <LoadingButton

@@ -1,9 +1,4 @@
 import axios from "axios";
-// import { getCookies } from "./axiosInstance";
-
-// const request = axios.create({
-//   baseURL: 'https://quangnh.xyz/v1/'
-// })
 
 export const loginApi = {
   post: (user) => {
@@ -49,6 +44,7 @@ export const questionApi = {
       },
     });
   },
+  
   submitQuestionsPlay: (listQuestionsSubmit) => {
     const url = "https://quangnh.xyz/v1/questions/submit";
     return axios.post(url, {

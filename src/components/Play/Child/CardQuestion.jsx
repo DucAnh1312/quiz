@@ -21,6 +21,7 @@ import questionImage from "../../../assets/questionImage.jpg";
 
 export default function CardQuestion() {
   const listQuestion = useSelector((state) => state.question.questionsPlay);
+  console.log(listQuestion)
   const [question, setQuestion] = useState(listQuestion[0]);
   const [numberQ, setNumberQ] = useState(1);
 

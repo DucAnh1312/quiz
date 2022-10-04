@@ -49,8 +49,29 @@ export const questionApi = {
     const url = "https://quangnh.xyz/v1/questions/submit";
     return axios.post(url, {
       headers: {
-        Authorization: `bearer ${localStorage.getItem('REFRESH_TOKEN')}`,
+        Authorization: `bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
       },
     });
   },
+//   getAllQuestion: (filterQuestions) => {
+//     const url = 'https://quangnh.xyz/v1/questions';
+//     return axios.get(
+//         url,
+//         {
+//             headers: {
+//                 'Authorization': `bearer ${localStorage.getItem('ACCESS_TOKEN')}`
+//             },
+//             params: {
+//                 sortField: filterQuestions.sortField,
+//                 keyWord: filterQuestions.keyWord,
+//                 order: filterQuestions.order,
+//                 size: filterQuestions.size,
+//                 page: filterQuestions.page
+
+//             }
+//         }
+//     )
+// }
 };
+
+

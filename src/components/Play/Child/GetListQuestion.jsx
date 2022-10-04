@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import MenuAppBar from "../../Header/MenuAppBar";
 import { questionApi } from "../../../api/api";
 import { updateQuestionsPlay } from "../../../store/questionSlice";
-import { data } from "../../Play/Child/CardQuestion";
+// import { data } from "../../Play/Child/CardQuestion";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

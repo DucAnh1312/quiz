@@ -4,7 +4,6 @@ import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
 import GetListQuestion from "../components/Play/Child/GetListQuestion";
 import Play from "../components/Play/Main/Play";
 import Admin from "../components/Admin/Admin";
-import Management from "../components/Admin/Management";
 
 const Router = [
   {
@@ -31,11 +30,6 @@ const Router = [
     path: "admin",
     component: <Admin />,
   },
-  {
-    path: "admin/management",
-    component: <Management />,
-  },
-
 ];
 
 export default Router;

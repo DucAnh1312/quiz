@@ -11,6 +11,10 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+
+
 // import { LoadingButton } from "@mui/lab";
 
 import { useEffect, useState } from "react";
@@ -18,17 +22,63 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import questionImage from "../../../assets/questionImage.jpg";
+import ThumbnailComponent from "./ThumbnailComponent";
+import { defaultThumbnail } from "../../../config/regex";
+import { setColor, numInArray } from "../../../ultis/ultis"
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 export default function CardQuestion() {
-  const listQuestion = useSelector((state) => state.question.questionsPlay);
-  console.log(listQuestion)
+  const listQuestion = useSelector((state) => state.getQuestionPlayReducer);
+  const number = listQuestion.length
+
   const [question, setQuestion] = useState(listQuestion[0]);
   const [numberQ, setNumberQ] = useState(1);
+  const [currentQuestion, setCurrentQuestion] = useState({});
+
+  const index = listQuestion.indexOf(question);
+
+
+  const handleChangeQuestion = (questionNumber) => {
+    // dispatch(setIndex(questionNumber - 1))
+}
+const handleAnswer = (answerId) => {
+    let tempArrSubmit = [...currentQuestion.answersSubmittedId]
+    if (numInArray(answerId, tempArrSubmit)) {
+        tempArrSubmit = tempArrSubmit.filter((el) => el !== answerId)
+    } else {
+        tempArrSubmit.push(answerId)
+    }
+    const tempQuestion = {
+        ...currentQuestion,
+        answersSubmittedId: [...tempArrSubmit]
+    }
+    // dispatch(setAnswerQuestion({...tempQuestion}))
+}
+
+
+  useEffect(() => {
+    if (listQuestion[index]?.answersSubmittedId) {
+      setCurrentQuestion({ ...listQuestion[index] });
+    } else {
+      setCurrentQuestion({ ...listQuestion[index], answersSubmittedId: [] });
+    }
+  }, [index, listQuestion]);
 
   const dispatch = useDispatch();
   const changeQuestion = (numberQuestion) => {
     setQuestion(listQuestion[numberQuestion - 1]);
     setNumberQ(numberQuestion);
+  };
+
+  //
+  const hanldeTick = (e) => {
+    console.log(e.target.value);
   };
 
   return (
@@ -44,11 +94,13 @@ export default function CardQuestion() {
       }}
     >
       <Typography
-        component="p"
+        component={"span"}
         variant="h5"
         margin={2}
         fontWeight={600}
         sx={{
+          display: "flex",
+          justifyContent: "center",
           textAlign: "center",
           color: "black",
           fontSize: "35px",
@@ -71,7 +123,7 @@ export default function CardQuestion() {
         }}
       >
         <Typography
-          component="p"
+          component={"span"}
           variant="h5"
           margin={3}
           fontWeight={600}
@@ -121,6 +173,7 @@ export default function CardQuestion() {
                     value={answer.id}
                     control={<Checkbox />}
                     label={answer.content}
+                    onChange={hanldeTick}
                   ></FormControlLabel>
                 </Grid>
               );
@@ -159,5 +212,54 @@ export default function CardQuestion() {
         </Button>
       </Box>
     </Card>
+
+
+    ////////////////////////////
+    // <div style={{ padding: "20px" }}>
+    //   <Typography variant="h2" component="h2" style={{ fontSize: "30px" }}>
+    //     {currentQuestion?.title}
+    //   </Typography>
+      
+    //   <ThumbnailComponent
+    //     thumbnailSrc={
+    //       currentQuestion?.thumbnail_link
+    //         ? currentQuestion?.thumbnail_link
+    //         : defaultThumbnail
+    //     }
+    //   />
+    //   <Box sx={{ width: "100%", margin: "50px 0" }}>
+    //     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+    //       {currentQuestion?.answers?.map((item) => {
+    //         const color = setColor(
+    //           item.id,
+    //           currentQuestion.answersSubmittedId,
+    //           "#25bd9396",
+    //           "#bdbdbd70"
+    //         );
+    //         return (
+    //           <Grid md={4} sm={6} xs={12} key={item.id}>
+    //             <Item
+    //               style={{ backgroundColor: `${color}` }}
+    //               onClick={() => {
+    //                 handleAnswer(item.id);
+    //               }}
+    //             >
+    //               {item.content}
+    //             </Item>
+    //           </Grid>
+    //         );
+    //       })}
+    //     </Grid>
+    //   </Box>
+    //   <Pagination
+    //     count={number}
+    //     color="primary"
+    //     defaultPage={1}
+    //     onChange={(event, pageNumber) => {
+    //       handleChangeQuestion(pageNumber);
+    //     }}
+    //     style={{ display: "flex", justifyContent: "center" }}
+    //   />
+    // </div>
   );
 }

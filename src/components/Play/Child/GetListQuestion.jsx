@@ -4,10 +4,9 @@ import Box from "@mui/material/Box";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Container from "@mui/material/Container";
 
-import MenuAppBar from "../../Header/MenuAppBar";
+import Header from "../../Header/Header"
 import { questionApi } from "../../../api/api";
-import { updateQuestionsPlay } from "../../../store/questionSlice";
-// import { data } from "../../Play/Child/CardQuestion";
+import { getQuestionPlay } from "../../../redux/actions/action";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +23,8 @@ export default function GetListQuestion() {
 
     try {
       const response = await questionApi.getQuestionsPlay(number);
-      // const dataQuestion = response.data.data;
-      // data(dataQuestion);
-      const action = updateQuestionsPlay(response.data.data);
-      dispatch(action);
+      const dataQuestion = response.data.data;
+      dispatch(getQuestionPlay(dataQuestion));
       navigate("../play");
     } catch (error) {}
     setLoading(false);
@@ -45,7 +42,7 @@ export default function GetListQuestion() {
 
   return (
     <>
-      <MenuAppBar />
+      <Header />
       <Container maxWidth="lg">
         <Box
           sx={{

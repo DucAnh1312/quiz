@@ -8,23 +8,27 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
-import { setCookies } from "../../api/axiosInstance";
+// import { setUser } from "../../redux/userSlice";
 import { loginApi } from "../../api/api";
 import loginImage from "../../assets/loginImage.jpg";
+import { getLoginData } from "../../redux/actions/action";
 
 const theme = createTheme();
 
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   // formik
   const formik = useFormik({
@@ -40,11 +44,14 @@ export default function Login() {
   // login
   const handleLogin = async (user) => {
     setLoading(true);
-
     try {
       const response = await loginApi.post(user);
-      const value = response.data.data;
 
+      //save login data to store
+      dispatch(getLoginData(response))
+
+      // save to local storage
+      const value = response.data.data;
       localStorage.setItem(
         "ACCESS_TOKEN",
         value.tokens.access_token.access_token
@@ -53,14 +60,13 @@ export default function Login() {
         "REFRESH_TOKEN",
         value.tokens.refresh_token.refresh_token
       );
-
       if (response.data.data.user.roles.length >= 2) {
         navigate("admin");
       } else {
-        navigate("getlistquestion");
+        navigate("play/getlistquestion")
       }
     } catch (error) {
-      setLoginStatus(true);
+      setAlert(true);
     }
     setLoading(false);
   };
@@ -86,10 +92,10 @@ export default function Login() {
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          {loginStatus && (
+          {alert && (
             <Alert
               onClose={() => {
-                setLoginStatus(false);
+                setAlert(false);
               }}
               severity="error"
             >

@@ -1,11 +1,11 @@
 import "./App.css";
 
-import Routing from "./Routes/Routing";
+import RouterComponent from "./router/RouterComponent";
 
 function App() {
   return (
     <div>
-      <Routing />
+      <RouterComponent />
     </div>
   );
 }

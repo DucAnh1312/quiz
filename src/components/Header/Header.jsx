@@ -13,8 +13,18 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 
-export default function MenuAppBar() {
+import { useSelector } from "react-redux";
+
+
+
+
+export default function Header() {
+
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const data = useSelector(state=>(state.userReducer.user.data))
+  const ava = data.data.user.avatar_link
+  
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,7 +44,7 @@ export default function MenuAppBar() {
 
           <div>
             <IconButton onClick={handleMenu} sx={{ p: 0 }}>
-              <Avatar src="" />
+              <Avatar src = {ava} />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -52,7 +62,6 @@ export default function MenuAppBar() {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleClose}>Log out</MenuItem>
             </Menu>
           </div>

@@ -16,6 +16,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { registerApi } from "../../api/api";
+import loginImage from "../../assets/loginImage.jpg";
+
 
 const theme = createTheme();
 
@@ -59,7 +61,7 @@ export default function Register() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${loginImage})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

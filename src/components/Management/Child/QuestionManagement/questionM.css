@@ -1,0 +1,24 @@
+.fieldForm{
+    margin-right: 15px;
+    height: 40px;
+}
+.group{
+    display: inline-block;
+    font-size: small;
+}
+.editIcon{
+    font-size: 32px;
+    background-color: green;
+    border-radius: 50%;
+    color: white;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.deleteIcon{
+    font-size: 32px;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    margin-left: 3px;
+    margin-right: 3px;
+}

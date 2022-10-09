@@ -83,7 +83,7 @@ export default function Management() {
             </List>
 
             <Divider />
-            <ListItem disablePadding onClick={hanldePlay}>
+            <ListItem disablePadding onClick={hanldePlay} >
               <ListItemButton>
                 <ListItemIcon>
                   <PlayCircleIcon />

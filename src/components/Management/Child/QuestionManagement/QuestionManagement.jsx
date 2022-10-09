@@ -19,6 +19,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const listHead = ["ID", "Title", "Create Day", "Image", "Action"];
 
@@ -62,6 +63,9 @@ export default function QuestionManagement() {
 
   return (
     <>
+      <Button variant="contained">
+        <AddCircleOutlineIcon sx={{mr: 1}}/> Add New
+      </Button>
       <Formik
         initialValues={{
           keyWord: "",
@@ -127,8 +131,8 @@ export default function QuestionManagement() {
               <label> Order </label>
               <br />
               <Field className="fieldForm" as="select" name="order">
-                <option value="ASC">Filter up</option>
-                <option value="DESC">Filter down</option>
+                <option value="ASC">Filter Up</option>
+                <option value="DESC">Filter Down</option>
               </Field>
             </div>
             <LoadingButton

@@ -25,10 +25,10 @@ export const updateAnswerApi = `${urlApi}/answers/`;
 export const deleteAnswerApi = `${urlApi}/answers/`;
 
 // user
+export const getUserApi = `${urlApi}/user/`;
 export const getUserByIdApi = `${urlApi}/user/`;
-// getUserById
-export const updateUserApi = `${urlApi}/v1/user/`;
-export const createNewUserApi = `${urlApi}/v1/user`;
-export const deleteUserApi = `${urlApi}/v1/user/`;
+export const updateUserApi = `${urlApi}/user/`;
+export const createNewUserApi = `${urlApi}/user`;
+export const deleteUserApi = `${urlApi}/user/`;
 ////// change Pass
 ////// upload image

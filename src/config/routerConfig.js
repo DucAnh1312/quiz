@@ -29,7 +29,7 @@ const routerConfig = [
     component: <Play />
   },
   {
-    path: "result",
+    path: "play/result",
     component: <Result />
   },
   {

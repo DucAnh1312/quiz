@@ -17,7 +17,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import questionImage from "../../../../assets/questionImage.jpg";
 
-const listHead = ["ID", "Email", "Name", "Avatar", "Role", "Action"];
+const listHead = ["ID", "Email", "Name", "Avatar", "Action"];
 
 // decode format date
 const formatDate = (stringDate) => {
@@ -36,10 +36,10 @@ export default function UserManagement() {
   // first times call
   useEffect(() => {
     getUser({
-      size: "1",
+      size: "9",
       order: "ASC",
       sortField: "id",
-      keyWord: "quang",
+      keyWord: "",
       page: "1",
       role: "",
     });
@@ -70,8 +70,8 @@ export default function UserManagement() {
           order: "ASC",
           sortField: "id",
           keyWord: "",
-          page: "",
-          role: "",
+          page: "1",
+          role1: "",
         }}
         onSubmit={(values) => {
           //   console.log(values);
@@ -138,7 +138,7 @@ export default function UserManagement() {
             <div className="group">
               <label> Role </label>
               <br />
-              <Field className="fieldForm" as="select" name="role">
+              <Field className="fieldForm" as="select" name="role1">
                 {/* chưa biết đặt value Both gì vì api trả về role cũng lung tung */}
                 <option value="">Both</option>
                 <option value="admin">Admin</option>
@@ -197,10 +197,6 @@ export default function UserManagement() {
                       height: "auto",
                     }}
                   />
-                </TableCell>
-                <TableCell>
-                {/* {value.role.map(value, index) } */}
-                {/* <TableCell align="left">{value.role[0]}</TableCell> */}
                 </TableCell>
                 <TableCell align="left">
                   <EditIcon className="editIcon" />{" "}

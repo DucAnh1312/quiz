@@ -47,6 +47,7 @@ export default function QuestionManagement() {
       sortField: "id",
     });
   }, []);
+  
   //Get all question
   const getAllQuestions = async (data) => {
     setLoading(true);

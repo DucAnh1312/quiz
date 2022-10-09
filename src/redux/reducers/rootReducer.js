@@ -1,12 +1,12 @@
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
 import getQuestionPlayReducer from "./getQuestionPlayReducer";
-import submitQuestionReducer from "./submitQuestionReducer"
+import submitResultsReducer from "./getResultsReducer";
 
 const rootReducer = combineReducers({
   userReducer,
   getQuestionPlayReducer,
-  submitQuestionReducer,
+  submitResultsReducer
 });
 
 export default rootReducer;

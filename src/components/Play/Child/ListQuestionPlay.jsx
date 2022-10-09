@@ -9,24 +9,43 @@ import {
   Checkbox,
   Box,
   Button,
+  Modal,
 } from "@mui/material";
+
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import questionImage from "../../../assets/questionImage.jpg";
-import { getQuestionSubmit } from "../../../redux/actions/action"
+import { questionApi } from "../../../api/questionApi";
+import { getResults } from "../../../redux/actions/action";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function ListQuestionPlay() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [modal, setModal] = useState(false);
+  const [backDrop, setBackDrop] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(0);
 
-  //array list question
+  // array list question
   const listQuestion = useSelector((state) => state.getQuestionPlayReducer);
 
-  const [questionIndex, setQuestionIndex] = useState(0);
 
   // next button
   const clickPrevious = () => {
@@ -37,12 +56,13 @@ export default function ListQuestionPlay() {
     setQuestionIndex((oldState) => oldState + 1);
   };
 
+  const answers = useRef([]);
   const totalQuestion = useRef(0);
   totalQuestion.current = listQuestion.length;
 
-  const answers = useRef([]);
-
+  ////////////////////////////////////// dang co van de
   const answerSubmit = [];
+
   // xử lý tick checkbox
   const hanldeTick = (e) => {
     // get array id from checkbox to submit
@@ -59,7 +79,9 @@ export default function ListQuestionPlay() {
     // gán lại cho cái vòng map answers.current
     answers.current[questionIndex].answersSubmittedId = answerSubmit;
   };
+  /////////////////////////////////////////////////////////////////
 
+  // map ra obj de post len API submit
   answers.current = listQuestion.map((question) => {
     return {
       id: question.id,
@@ -68,14 +90,80 @@ export default function ListQuestionPlay() {
   });
 
   const hanldeSubmit = () => {
-    setQuestionIndex(0);
-    navigate("/result");
-    console.log (answers.current)
-    dispatch(getQuestionSubmit(answers.current));
+    setModal(true);
+  };
+
+  const sureSubmit = () => {
+    submit({
+      listQuestionSubmitted: [
+        {
+          id: 57,
+          answersSubmittedId: [69],
+        },
+        {
+          id: 10,
+          answersSubmittedId: [12, 15],
+        },
+      ],
+    });
+  };
+
+  const submit = async (data) => {
+    setModal(false);
+    setBackDrop(true);
+    try {
+      const response = await questionApi.submitQuestionsPlay(data);
+      setQuestionIndex(0);
+      navigate("/play/result");
+      dispatch(getResults(response));
+    } catch (error) {
+      console.log(error);
+    }
+    setModal(false);
+    setBackDrop(false);
   };
 
   return (
     <>
+      {/* ////////////////////////////////Modal/////////////////////////////////////// */}
+      <Modal
+        open={modal}
+        // onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            sx={{ textAlign: "center" }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Are you sure with the answer?
+          </Typography>
+          <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+            <Button
+              sx={{ mr: 8 }}
+              variant="contained"
+              onClick={() => setModal(false)}
+            >
+              No
+            </Button>
+            <Button sx={{ ml: 8 }} variant="contained" onClick={sureSubmit}>
+              Yes
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+      {/* ////////////////////////////////Modal/////////////////////////////////////// */}
+      {/* ////////////////////////////////////BackDrop/////////////////////////////////////// */}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={backDrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {/* ////////////////////////////////////BackDrop/////////////////////////////////////// */}
       <Card
         sx={{
           width: "100%",

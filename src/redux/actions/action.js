@@ -6,29 +6,15 @@ export const getLoginData = (user) => {
 };
 
 export const getQuestionPlay = (question) => {
-    return {
-        type: "getquestionplay",
-        payload: question
-    }
-}
-
-export const getQuestionSubmit = (data) => {
   return {
-    type : "getquestionsubmit",
-    payload: data
-  }
-}
+    type: "getquestionplay",
+    payload: question,
+  };
+};
 
-// export const getIndex = (index) => {
-//   return {
-//     type: "setindex",
-//     payload: index
-//   }
-// }
-
-// export const getAnswerQuestion = ( question) => {
-//   return {
-//     type: "setanswerquestion",
-//     payload: question
-//   }
-// }
+export const getResults = (data) => {
+  return {
+    type: "getresults",
+    payload: data,
+  };
+};

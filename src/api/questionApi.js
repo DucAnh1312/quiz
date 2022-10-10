@@ -3,6 +3,8 @@ import {
   getQuestionsPlayApi,
   getQuestionsApi,
   submitQuestionsApi,
+  deleteQuestionApi,
+  updateQuestionApi,
 } from "./customUrl";
 import LocalStorageService from "../tokenStorage/LocalStorageService";
 
@@ -44,5 +46,20 @@ export const questionApi = {
       },
     });
   },
+  deleteQuestion: (id) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + LocalStorageService.getAccessToken(),
+      },
+    };
+    return axios.delete(deleteQuestionApi + id, config);
+  },
+  createQuestion: (question) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + LocalStorageService.getAccessToken(),
+      },
+    };
+    return axios.post(updateQuestionApi + "/questions", question, config);
+  },
 };
-

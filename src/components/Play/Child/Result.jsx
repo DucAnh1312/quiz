@@ -20,6 +20,7 @@ import { useState } from "react";
 
 import questionImage from "../../../assets/questionImage.jpg";
 
+
 export default function Result(color) {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();

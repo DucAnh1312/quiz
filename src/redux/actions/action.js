@@ -18,3 +18,10 @@ export const getResults = (data) => {
     payload: data,
   };
 };
+
+export const getQuestionId = (id) => {
+  return {
+    type: 'getidquestion',
+    payload: id
+  }
+}

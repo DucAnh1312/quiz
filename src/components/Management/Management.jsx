@@ -22,13 +22,19 @@ import UserManagement from "./Child/UserManagement/UserManagement";
 
 const drawerWidth = 220;
 
-export default function Management() {
+
+
+
+
+
+export default function Management(color) {
   const navigate = useNavigate();
   const [page, setPage] = useState(false);
   const hanldePlay = () => {
     navigate("../play/getlistquestion");
   };
 
+  
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -59,7 +65,7 @@ export default function Management() {
                   setPage(false);
                 }}
               >
-                <ListItemButton>
+                <ListItemButton sx={{backgroundColor:{color}}}>
                   <ListItemIcon>
                     <ManageAccountsIcon />
                   </ListItemIcon>

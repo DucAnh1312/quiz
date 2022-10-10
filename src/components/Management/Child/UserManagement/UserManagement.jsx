@@ -7,6 +7,7 @@ import Pagination from "@mui/material/Pagination";
 import { userApi } from "../../../../api/userApi";
 
 import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
@@ -30,29 +31,23 @@ const formatDate = (stringDate) => {
 
 export default function UserManagement() {
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageTotal, setTotalPage] = useState("");
 
   const userList = useRef([]);
 
-  // first times call
+  // call first time and when change page
   useEffect(() => {
-    getUser({
-      size: "9",
-      order: "ASC",
-      sortField: "id",
-      keyWord: "",
-      page: "1",
-      role: "",
-    });
-  }, []);
+    getUser({ page: page });
+  }, [page]);
 
   const getUser = async (data) => {
     setLoading(true);
     try {
       const response = await userApi.getUser(data);
       const inputData = response.data.data;
-      //   console.log(inputData);
       userList.current = inputData.result;
-      //   setPage(inputData.totalPages);
+      setTotalPage(inputData.totalPages);
     } catch (error) {
       console.log("loi filter user", error);
     }
@@ -70,7 +65,6 @@ export default function UserManagement() {
           order: "ASC",
           sortField: "id",
           keyWord: "",
-          page: "1",
           role1: "",
         }}
         onSubmit={(values) => {
@@ -117,17 +111,6 @@ export default function UserManagement() {
               />
             </div>
             <div className="group">
-              <label> Page </label>
-              <br />
-              <Field
-                className="fieldForm"
-                name={"page"}
-                type="number"
-                min="1"
-                required
-              />
-            </div>
-            <div className="group">
               <label> Order </label>
               <br />
               <Field className="fieldForm" as="select" name="order">
@@ -157,56 +140,71 @@ export default function UserManagement() {
         </Box>
       </Formik>
       {/* //////////////////////////////////////////////////////////////////// */}
-      <Table sx={{ width: "100%", mt: 5 }} aria-label="simple table">
-        {/* //////////////////////////////////////////////////////////////////////////// */}
-        <TableHead>
-          <TableRow sx={{ backgroundColor: "#F0EFEF" }}>
-            {listHead.map((value) => {
+      <TableContainer sx={{ maxHeight: 900, mt: 5 }}>
+        <Table
+          sx={{ width: "100%" }}
+          aria-label="simple table"
+          stickyHeader
+          aria-label="sticky table"
+        >
+          {/* //////////////////////////////////////////////////////////////////////////// */}
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#F0EFEF" }}>
+              {listHead.map((value) => {
+                return (
+                  <TableCell sx={{ fontWeight: "bold" }} align="left">
+                    {value}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+          {/* /////////////////////////////////////////////// */}
+          <TableBody>
+            {userList.current.map((value, index) => {
               return (
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  {value}
-                </TableCell>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="left">{value.email}</TableCell>
+                  <TableCell align="left">{value.name}</TableCell>
+                  <TableCell align="center">
+                    <CardMedia
+                      component="img"
+                      height="200"
+                      style={{ borderRadius: 5 }}
+                      image={value.avatar_link || questionImage}
+                      alt="No Image"
+                      sx={{
+                        display: "block",
+                        maxWidth: "150px",
+                        maxHeight: "110px",
+                        width: "auto",
+                        height: "auto",
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    <EditIcon className="editIcon" />{" "}
+                    <DeleteIcon className="deleteIcon" />{" "}
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </TableRow>
-        </TableHead>
-        {/* /////////////////////////////////////////////// */}
-        <TableBody>
-          {userList.current.map((value, index) => {
-            return (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {index + 1}
-                </TableCell>
-                <TableCell align="left">{value.email}</TableCell>
-                <TableCell align="left">{value.name}</TableCell>
-                <TableCell align="center">
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    style={{ borderRadius: 5 }}
-                    image={value.avatar_link || questionImage}
-                    alt="No Image"
-                    sx={{
-                      display: "block",
-                      maxWidth: "150px",
-                      maxHeight: "110px",
-                      width: "auto",
-                      height: "auto",
-                    }}
-                  />
-                </TableCell>
-                <TableCell align="left">
-                  <EditIcon className="editIcon" />{" "}
-                  <DeleteIcon className="deleteIcon" />{" "}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Pagination
+        sx={{ display: "flex", justifyContent: "center", mt:10  }}
+        count={pageTotal}
+        color="primary"
+        onChange={(event, pageNumber) => {
+          setPage(pageNumber);
+        }}
+      />
     </>
   );
 }

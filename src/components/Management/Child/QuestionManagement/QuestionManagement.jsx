@@ -1,17 +1,14 @@
-import { questionApi } from "../../../../api/questionApi";
-
 import { Formik, Form, Field } from "formik";
 import { Button, Box, CardMedia } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { useState, useRef, useEffect } from "react";
-import Pagination from "@mui/material/Pagination";
+import { useDispatch } from "react-redux";
+import { getQuestionId } from "../../../../redux/actions/action";
+import { ModalDeleteQuestion } from "../../Modal/ModalDeleteQuestion";
+import { ModalUpdateQuestion } from "../../Modal/ModalUpdateQuestion";
+import { questionApi } from "../../../../api/questionApi";
 
-import questionImage from "../../../../assets/questionImage.jpg";
-import "./questionM.css";
-
-////////////////////////////////////////////////////////////////////
-
+import SearchIcon from "@mui/icons-material/Search";
+import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,7 +16,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LoadingButton from "@mui/lab/LoadingButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import questionImage from "../../../../assets/questionImage.jpg";
+import Pagination from "@mui/material/Pagination";
+
+import "./questionM.css";
 
 const listHead = ["ID", "Title", "Create Day", "Image", "Action"];
 
@@ -33,44 +35,65 @@ const formatDate = (stringDate) => {
 };
 
 export default function QuestionManagement() {
+  const [modalDel, setModalDel] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [modalCreate, setModalCreate] = useState();
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageTotal, setTotalPage] = useState("");
+  const dispatch = useDispatch();
 
   const questionList = useRef([]);
 
-  // first times call
+  // call first time and when change page
   useEffect(() => {
-    getAllQuestions({
-      page: 1,
-      size: 5,
-      order: "ASC",
-      sortField: "id",
-    });
-  }, []);
-  
-  //Get all question
+    getAllQuestions({ page: page });
+  }, [page]);
+
+  //Get question
   const getAllQuestions = async (data) => {
     setLoading(true);
     try {
       const response = await questionApi.getQuestion(data);
       const inputData = response.data.data;
       questionList.current = inputData.result;
-      setPage(inputData.totalPages);
+      setTotalPage(inputData.totalPages);
     } catch (error) {
       console.log("loi filter question", error);
     }
     setLoading(false);
   };
 
+  // deleteQuestion
+  const deleteQuestion = (data) => {
+    setModalDel(true);
+    dispatch(getQuestionId(data));
+  };
+
+  const editQuestion = (data) => {
+    dispatch(getQuestionId(data));
+    setModalEdit(true);
+  };
+
   return (
     <>
+      {/* modal///////////////////////////////////////////////////////////// */}
+      <ModalDeleteQuestion modalDel={modalDel} setModalDel={setModalDel} />
+
+      <ModalUpdateQuestion modalEdit={modalEdit} setModalEdit={setModalEdit} />
+      {/* modal///////////////////////////////////////////////////////////// */}
+
+      {/* addButton//////////////////////////////////////////////////////////////////// */}
       <Button variant="contained">
-        <AddCircleOutlineIcon sx={{mr: 1}}/> Add New
+        <AddCircleOutlineIcon sx={{ mr: 1 }} /> Add New
       </Button>
+      {/* addButton//////////////////////////////////////////////////////////////////// */}
+
+      {/* Filter/////////////////////////////////////////////////////////////////////// */}
       <Formik
         initialValues={{
           keyWord: "",
-          page: "",
+          // page: "",
           size: "",
           order: "ASC",
           sortField: "id",
@@ -118,17 +141,6 @@ export default function QuestionManagement() {
               />
             </div>
             <div className="group">
-              <label> Page </label>
-              <br />
-              <Field
-                className="fieldForm"
-                name={"page"}
-                type="number"
-                min="1"
-                required
-              />
-            </div>
-            <div className="group">
               <label> Order </label>
               <br />
               <Field className="fieldForm" as="select" name="order">
@@ -147,10 +159,10 @@ export default function QuestionManagement() {
           </Form>
         </Box>
       </Formik>
-      {/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-
-      <Table sx={{ width: "100%", mt: 5 }} aria-label="simple table">
-        {/* //////////////////////////////////////////////////////////////////////////// */}
+      {/* Filter/////////////////////////////////////////////////////////////////////// */}
+      <TableContainer sx={{ maxHeight: 900, mt:5 }}>
+      <Table sx={{ width: "100%" }} aria-label="simple table" stickyHeader aria-label="sticky table">
+        {/* tableHead//////////////////////////////////////////////////////////////////////////// */}
         <TableHead>
           <TableRow sx={{ backgroundColor: "#F0EFEF" }}>
             {listHead.map((value) => {
@@ -162,7 +174,9 @@ export default function QuestionManagement() {
             })}
           </TableRow>
         </TableHead>
-        {/* /////////////////////////////////////////////// */}
+        {/* tableHead//////////////////////////////////////////////////////////////////////////// */}
+
+        {/* tableBody//////////////////////////////////////////////////////////////////////////// */}
         <TableBody>
           {questionList.current.map((value, index) => {
             return (
@@ -193,15 +207,34 @@ export default function QuestionManagement() {
                   />
                 </TableCell>
                 <TableCell align="left">
-                  {" "}
-                  <EditIcon className="editIcon" />{" "}
-                  <DeleteIcon className="deleteIcon" />{" "}
+                  <EditIcon
+                    className="editIcon"
+                    onClick={() => {
+                      editQuestion(value.id);
+                    }}
+                  />
+                  <DeleteIcon
+                    className="deleteIcon"
+                    onClick={() => {
+                      deleteQuestion(value.id);
+                    }}
+                  />
                 </TableCell>
               </TableRow>
             );
           })}
         </TableBody>
+        {/* tableBody//////////////////////////////////////////////////////////////////////////// */}
       </Table>
+      </TableContainer>
+      <Pagination
+        sx={{ display: "flex", justifyContent: "center", mt:10 }}
+        count={pageTotal}
+        color="primary"
+        onChange={(event, pageNumber) => {
+          setPage(pageNumber);
+        }}
+      />
     </>
   );
 }

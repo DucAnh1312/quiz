@@ -8,7 +8,6 @@ export const logoutApi = `${urlApi}/authentication/logout`;
 export const refreshTokenApi = `${urlApi}/authentication/refresh-token`;
 
 // question
-export const createNewQuestion = `${urlApi}/questions/play`;
 export const getQuestionsApi = `${urlApi}/questions`;
 export const getQuestionsPlayApi = `${urlApi}/questions/play`;
 export const submitQuestionsApi = `${urlApi}/questions/submit`;
@@ -16,6 +15,7 @@ export const getQuestionByIdApi = `${urlApi}/questions/`;
 export const updateQuestionApi = `${urlApi}/questions/`;
 export const deleteQuestionApi = `${urlApi}/questions/`;
 export const uploadThumbnailApi = `${urlApi}/questions/upload-thumbnail`;
+export const createNewQuestion = `${urlApi}/questions`
 
 // answer
 export const createAnswerApi = `${urlApi}/answers`;

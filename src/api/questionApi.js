@@ -5,6 +5,7 @@ import {
   submitQuestionsApi,
   deleteQuestionApi,
   updateQuestionApi,
+  createNewQuestion
 } from "./customUrl";
 import LocalStorageService from "../tokenStorage/LocalStorageService";
 
@@ -60,6 +61,6 @@ export const questionApi = {
         Authorization: "Bearer " + LocalStorageService.getAccessToken(),
       },
     };
-    return axios.post(updateQuestionApi + "/questions", question, config);
+    return axios.post(createNewQuestion, question, config);
   },
 };

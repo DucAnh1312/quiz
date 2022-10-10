@@ -26,14 +26,14 @@ const drawerWidth = 220;
 
 
 
-
 export default function Management(color) {
   const navigate = useNavigate();
   const [page, setPage] = useState(false);
   const hanldePlay = () => {
     navigate("../play/getlistquestion");
   };
-
+  
+ 
   
   return (
     <>

@@ -1,6 +1,6 @@
 import { Button, Box, CardMedia, Modal, Typography } from "@mui/material";
 import { useState } from "react";
-import { questionApi } from "../../../api/questionApi";
+import { userApi } from "../../../api/userApi";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgres from "@mui/material/CircularProgress";
 import { useSelector } from "react-redux";
@@ -16,22 +16,22 @@ const style = {
   p: 4,
 };
 
-export const ModalDeleteQuestion = (props) => {
-  const idDelQuestion = useSelector(state=>(state.getQuestionIdReducer))
+export const ModalDeleteUser = (props) => {
+//   const idDelQuestion = useSelector(state=>(state.getQuestionIdReducer))
   
   const [backDrop, setBackDrop] = useState(false);
 
   const confirmDel = () => {
-    delQuestion(idDelQuestion)
+    // delUser(idDelUser)
   }
 
 
-  const delQuestion = async (id) => {
+  const delUser = async (id) => {
     props.setStateDelete(setStateDelete => !setStateDelete)
     props.setModalDel(false)
     setBackDrop(true);
     try {
-      const response = await questionApi.deleteQuestion(id);
+      const response = await userApi.deleteUser(id);
     } catch (error) {}
     setBackDrop(false);
   };

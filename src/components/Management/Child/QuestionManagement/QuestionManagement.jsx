@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { getQuestionId } from "../../../../redux/actions/action";
 import { ModalDeleteQuestion } from "../../Modal/ModalDeleteQuestion";
 import { ModalUpdateQuestion } from "../../Modal/ModalUpdateQuestion";
+import { ModalCreateQA } from "../../Modal/ModalCreateQA";
 import { questionApi } from "../../../../api/questionApi";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -41,6 +42,8 @@ export default function QuestionManagement() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageTotal, setTotalPage] = useState("");
+  const [stateDelete, setStateDelete] = useState(false);
+
   const dispatch = useDispatch();
 
   const questionList = useRef([]);
@@ -48,7 +51,7 @@ export default function QuestionManagement() {
   // call first time and when change page
   useEffect(() => {
     getAllQuestions({ page: page });
-  }, [page]);
+  }, [page,stateDelete]);
 
   //Get question
   const getAllQuestions = async (data) => {
@@ -78,13 +81,21 @@ export default function QuestionManagement() {
   return (
     <>
       {/* modal///////////////////////////////////////////////////////////// */}
-      <ModalDeleteQuestion modalDel={modalDel} setModalDel={setModalDel} />
-
+      <ModalDeleteQuestion modalDel={modalDel} setModalDel={setModalDel} setStateDelete={setStateDelete} />
       <ModalUpdateQuestion modalEdit={modalEdit} setModalEdit={setModalEdit} />
+      <ModalCreateQA
+        modalCreate={modalCreate}
+        setModalCreate={setModalCreate}
+      />
       {/* modal///////////////////////////////////////////////////////////// */}
 
       {/* addButton//////////////////////////////////////////////////////////////////// */}
-      <Button variant="contained">
+      <Button
+        variant="contained"
+        onClick={() => {
+          setModalCreate(true);
+        }}
+      >
         <AddCircleOutlineIcon sx={{ mr: 1 }} /> Add New
       </Button>
       {/* addButton//////////////////////////////////////////////////////////////////// */}
@@ -160,75 +171,80 @@ export default function QuestionManagement() {
         </Box>
       </Formik>
       {/* Filter/////////////////////////////////////////////////////////////////////// */}
-      <TableContainer sx={{ maxHeight: 900, mt:5 }}>
-      <Table sx={{ width: "100%" }} aria-label="simple table" stickyHeader aria-label="sticky table">
-        {/* tableHead//////////////////////////////////////////////////////////////////////////// */}
-        <TableHead>
-          <TableRow sx={{ backgroundColor: "#F0EFEF" }}>
-            {listHead.map((value) => {
+      <TableContainer sx={{ maxHeight: 600, mt: 5 }}>
+        <Table
+          sx={{ width: "100%" }}
+          aria-label="simple table"
+          stickyHeader
+          aria-label="sticky table"
+        >
+          {/* tableHead//////////////////////////////////////////////////////////////////////////// */}
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#F0EFEF" }}>
+              {listHead.map((value) => {
+                return (
+                  <TableCell sx={{ fontWeight: "bold" }} align="left">
+                    {value}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+          {/* tableHead//////////////////////////////////////////////////////////////////////////// */}
+
+          {/* tableBody//////////////////////////////////////////////////////////////////////////// */}
+          <TableBody>
+            {questionList.current.map((value, index) => {
               return (
-                <TableCell sx={{ fontWeight: "bold" }} align="left">
-                  {value}
-                </TableCell>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="left">{value.title}</TableCell>
+                  <TableCell align="left">
+                    {formatDate(value.createdAt)}
+                  </TableCell>
+                  <TableCell align="left">
+                    <CardMedia
+                      component="img"
+                      height="200"
+                      style={{ borderRadius: 5 }}
+                      image={value.thumbnail_link || questionImage}
+                      alt="No Image"
+                      sx={{
+                        display: "block",
+                        maxWidth: "200px",
+                        maxHeight: "110px",
+                        width: "auto",
+                        height: "auto",
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell align="left">
+                    <EditIcon
+                      className="editIcon"
+                      onClick={() => {
+                        editQuestion(value.id);
+                      }}
+                    />
+                    <DeleteIcon
+                      className="deleteIcon"
+                      onClick={() => {
+                        deleteQuestion(value.id);
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </TableRow>
-        </TableHead>
-        {/* tableHead//////////////////////////////////////////////////////////////////////////// */}
-
-        {/* tableBody//////////////////////////////////////////////////////////////////////////// */}
-        <TableBody>
-          {questionList.current.map((value, index) => {
-            return (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {index + 1}
-                </TableCell>
-                <TableCell align="left">{value.title}</TableCell>
-                <TableCell align="left">
-                  {formatDate(value.createdAt)}
-                </TableCell>
-                <TableCell align="left">
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    style={{ borderRadius: 5 }}
-                    image={value.thumbnail_link || questionImage}
-                    alt="No Image"
-                    sx={{
-                      display: "block",
-                      maxWidth: "200px",
-                      maxHeight: "110px",
-                      width: "auto",
-                      height: "auto",
-                    }}
-                  />
-                </TableCell>
-                <TableCell align="left">
-                  <EditIcon
-                    className="editIcon"
-                    onClick={() => {
-                      editQuestion(value.id);
-                    }}
-                  />
-                  <DeleteIcon
-                    className="deleteIcon"
-                    onClick={() => {
-                      deleteQuestion(value.id);
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        {/* tableBody//////////////////////////////////////////////////////////////////////////// */}
-      </Table>
+          </TableBody>
+          {/* tableBody//////////////////////////////////////////////////////////////////////////// */}
+        </Table>
       </TableContainer>
       <Pagination
-        sx={{ display: "flex", justifyContent: "center", mt:10 }}
+        sx={{ display: "flex", justifyContent: "center", mt: 10 }}
         count={pageTotal}
         color="primary"
         onChange={(event, pageNumber) => {

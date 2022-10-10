@@ -15,6 +15,7 @@ import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { ModalDeleteUser } from "../../Modal/ModalDeleteUser";
 
 import questionImage from "../../../../assets/questionImage.jpg";
 
@@ -33,6 +34,8 @@ export default function UserManagement() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageTotal, setTotalPage] = useState("");
+  const [modalDel, setModalDel] = useState(false);
+
 
   const userList = useRef([]);
 
@@ -140,7 +143,7 @@ export default function UserManagement() {
         </Box>
       </Formik>
       {/* //////////////////////////////////////////////////////////////////// */}
-      <TableContainer sx={{ maxHeight: 900, mt: 5 }}>
+      <TableContainer sx={{ maxHeight: 600, mt: 5 }}>
         <Table
           sx={{ width: "100%" }}
           aria-label="simple table"

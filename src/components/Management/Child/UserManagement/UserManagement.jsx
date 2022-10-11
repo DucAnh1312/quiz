@@ -16,8 +16,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { ModalDeleteUser } from "../../Modal/ModalDeleteUser";
+import { useDispatch } from "react-redux";
 
 import questionImage from "../../../../assets/questionImage.jpg";
+import { getQuestionId } from "../../../../redux/actions/action";
 
 const listHead = ["ID", "Email", "Name", "Avatar", "Action"];
 
@@ -35,14 +37,16 @@ export default function UserManagement() {
   const [page, setPage] = useState(1);
   const [pageTotal, setTotalPage] = useState("");
   const [modalDel, setModalDel] = useState(false);
+  const [stateDelete, setStateDelete] = useState(false);
 
+  const dispatch = useDispatch();
 
   const userList = useRef([]);
 
   // call first time and when change page
   useEffect(() => {
     getUser({ page: page });
-  }, [page]);
+  }, [page,stateDelete]);
 
   const getUser = async (data) => {
     setLoading(true);
@@ -57,8 +61,21 @@ export default function UserManagement() {
     setLoading(false);
   };
 
+  const deleteUser = (id) => {
+    setModalDel(true);
+    dispatch(getQuestionId(id));
+  };
+
   return (
     <>
+      {/* ////////////////////////////////////////////////////////////// */}
+      <ModalDeleteUser
+        modalDel={modalDel}
+        setModalDel={setModalDel}
+        setStateDelete={setStateDelete}
+      />
+      {/* ////////////////////////////////////////////////////////////// */}
+
       <Button variant="contained">
         <AddCircleOutlineIcon sx={{ mr: 1 }} /> Add New
       </Button>
@@ -191,8 +208,13 @@ export default function UserManagement() {
                     />
                   </TableCell>
                   <TableCell align="left">
-                    <EditIcon className="editIcon" />{" "}
-                    <DeleteIcon className="deleteIcon" />{" "}
+                    <EditIcon className="editIcon" />
+                    <DeleteIcon
+                      className="deleteIcon"
+                      onClick={() => {
+                        deleteUser(value.id);
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               );
@@ -201,7 +223,7 @@ export default function UserManagement() {
         </Table>
       </TableContainer>
       <Pagination
-        sx={{ display: "flex", justifyContent: "center", mt:10  }}
+        sx={{ display: "flex", justifyContent: "center", mt: 10 }}
         count={pageTotal}
         color="primary"
         onChange={(event, pageNumber) => {

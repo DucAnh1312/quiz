@@ -38,7 +38,8 @@ const formatDate = (stringDate) => {
 export default function QuestionManagement() {
   const [modalDel, setModalDel] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
-  const [modalCreate, setModalCreate] = useState();
+  const [modalCreate, setModalCreate] = useState(false);
+  const [modalCreateAnswer, setmodalCreateAnswer] = useState();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageTotal, setTotalPage] = useState("");
@@ -51,7 +52,7 @@ export default function QuestionManagement() {
   // call first time and when change page
   useEffect(() => {
     getAllQuestions({ page: page });
-  }, [page,stateDelete]);
+  }, [page, stateDelete]);
 
   //Get question
   const getAllQuestions = async (data) => {
@@ -81,11 +82,20 @@ export default function QuestionManagement() {
   return (
     <>
       {/* modal///////////////////////////////////////////////////////////// */}
-      <ModalDeleteQuestion modalDel={modalDel} setModalDel={setModalDel} setStateDelete={setStateDelete} />
-      <ModalUpdateQuestion modalEdit={modalEdit} setModalEdit={setModalEdit} />
+      <ModalDeleteQuestion
+        modalDel={modalDel}
+        setModalDel={setModalDel}
+        setStateDelete={setStateDelete}
+      />
+      <ModalUpdateQuestion
+        modalEdit={modalEdit}
+        setModalEdit={setModalEdit}
+        setStateDelete={setStateDelete}
+      />
       <ModalCreateQA
         modalCreate={modalCreate}
         setModalCreate={setModalCreate}
+        setStateDelete={setStateDelete}
       />
       {/* modal///////////////////////////////////////////////////////////// */}
 

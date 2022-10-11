@@ -4,6 +4,8 @@ import { questionApi } from "../../../api/questionApi";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgres from "@mui/material/CircularProgress";
 import { useSelector } from "react-redux";
+import { useFormik } from "formik";
+import TextField from "@mui/material/TextField";
 
 const style = {
   position: "absolute",
@@ -17,24 +19,34 @@ const style = {
 };
 
 export const ModalUpdateQuestion = (props) => {
-  const idUpdateQuestion = useSelector(state=>(state.getQuestionIdReducer))
-//   console.log(idUpdateQuestion)
-  
+  const idUpdateQuestion = useSelector((state) => state.getQuestionIdReducer);
+  // console.log(idUpdateQuestion)
+
   const [backDrop, setBackDrop] = useState(false);
 
-//   const confirmDel = () => {
-//     delQuestion(idDelQuestion)
-//   }
+  //   const confirmDel = () => {
+  //     delQuestion(idDelQuestion)
+  //   }
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+    },
+    onSubmit: (values) => {
+      // addQuestion(values);
+      // console.log(values);
+      updateQuestion(values,idUpdateQuestion)
+    },
+  });
 
-
-//   const delQuestion = async (id) => {
-//     props.setModalDel(false)
-//     setBackDrop(true);
-//     try {
-//       const response = await questionApi.deleteQuestion(id);
-//     } catch (error) {}
-//     setBackDrop(false);
-//   };
+  const updateQuestion = async (question, id) => {
+    props.setModalEdit(false);
+    setBackDrop(true);
+    try {
+      const response = await questionApi.editQuestion(question, id);
+    } catch (error) {}
+    setBackDrop(false);
+    props.setStateDelete((prev) => !prev);
+  };
 
   return (
     <>
@@ -60,18 +72,34 @@ export const ModalUpdateQuestion = (props) => {
           >
             Update Question
           </Typography>
-          <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
-            <Button
-              sx={{ mr: 8 }}
-              variant="contained"
-              onClick={() => props.setModalEdit(false)}
-            >
-              No
-            </Button>
-            <Button sx={{ ml: 8 }} variant="contained">
-              Yes
-            </Button>
+          {/* ////////////////////////////////////////////////////////////////////////////////////// */}
+          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="title"
+              label="title"
+              name="title"
+              autoFocus
+              onChange={formik.handleChange}
+              value={formik.values.title}
+            />
+            <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+              <Button
+                sx={{ mr: 8 }}
+                variant="contained"
+                onClick={() => props.setModalEdit(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" sx={{ ml: 8 }} variant="contained">
+                Update
+              </Button>
+            </Box>
           </Box>
+
+          {/* ////////////////////////////////////////////////////////////////////////////////////// */}
         </Box>
       </Modal>
     </>

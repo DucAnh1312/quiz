@@ -17,23 +17,24 @@ const style = {
 };
 
 export const ModalDeleteUser = (props) => {
-//   const idDelQuestion = useSelector(state=>(state.getQuestionIdReducer))
-  
+  const idDelUser = useSelector(state=>(state.getQuestionIdReducer))
+//   console.log(idDelUser)
   const [backDrop, setBackDrop] = useState(false);
 
   const confirmDel = () => {
-    // delUser(idDelUser)
+    delUser(idDelUser)
   }
 
 
   const delUser = async (id) => {
-    props.setStateDelete(setStateDelete => !setStateDelete)
     props.setModalDel(false)
     setBackDrop(true);
     try {
       const response = await userApi.deleteUser(id);
     } catch (error) {}
     setBackDrop(false);
+    props.setStateDelete(setStateDelete => !setStateDelete)
+
   };
 
   return (
@@ -58,7 +59,7 @@ export const ModalDeleteUser = (props) => {
             variant="h6"
             component="h2"
           >
-            Are you sure to delete this Question?
+            Are you sure to delete this User?
           </Typography>
           <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
             <Button

@@ -11,8 +11,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Container from '@mui/material/Container';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Container from "@mui/material/Container";
 
 // import { useSelector } from "react-redux";
 
@@ -45,35 +45,29 @@ export const ModalCreateQA = (props) => {
 
   const [backDrop, setBackDrop] = useState(false);
 
+  // formik
+
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      title: "",
+      thumbnail_link: "",
     },
-    enableReinitialize: true,
-    validationSchema: validationSchema,
     onSubmit: (values) => {
-      //   handleLogin(values);
+      addQuestion(values);
     },
   });
-
-  const create = () => {
-    addQuestion({
-      title: "Câu hỏi mới?",
-      thumbnail_link:
-        "https://res.cloudinary.com/qn052289/image/upload/v1663576945/ys7cvhnryu701mgalk6o.png",
-    });
-  };
 
   const addQuestion = async (data) => {
     setBackDrop(true);
     props.setModalCreate(false);
     try {
       const response = await questionApi.createQuestion(data);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.log(error);
     }
+    props.setStateDelete((prev) => !prev);
+
     setBackDrop(false);
   };
 
@@ -102,70 +96,45 @@ export const ModalCreateQA = (props) => {
             Create New Question
           </Typography>
           {/* /////////////////////////////////////////////////////////////////////////////////////////// */}
-          <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
-              <Box
-                sx={{
-                  marginTop: 8,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
+          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="title"
+              label="title"
+              name="title"
+              autoFocus
+              onChange={formik.handleChange}
+              value={formik.values.title}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="thumbnail_link"
+              label="thumbnail_link"
+              type="thumbnail_link"
+              id="thumbnail_link"
+              autoComplete="current-password"
+              onChange={formik.handleChange}
+              value={formik.values.thumbnail_link}
+            />
+            <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
+              <Button
+                sx={{ mr: 8 }}
+                variant="contained"
+                onClick={() => props.setModalCreate(false)}
               >
-                <Box
-                  component="form"
-                //   onSubmit={handleSubmit}
-                  noValidate
-                  sx={{ mt: 1 }}
-                >
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                  />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                  >
-                    Sign In
-                  </Button>
-                </Box>
-              </Box>
-            </Container>
-          </ThemeProvider>
+                Cancel
+              </Button>
+              <Button type="submit" sx={{ ml: 8 }} variant="contained">
+                Create
+              </Button>
+            </Box>
+          </Box>
 
           {/* /////////////////////////////////////////////////////////////////////////////////////////// */}
-
-          <Box sx={{ mt: 5, display: "flex", justifyContent: "center" }}>
-            <Button
-              sx={{ mr: 8 }}
-              variant="contained"
-              onClick={() => props.setModalCreate(false)}
-            >
-              Cancel
-            </Button>
-            <Button sx={{ ml: 8 }} variant="contained" onClick={create}>
-              Create
-            </Button>
-          </Box>
         </Box>
       </Modal>
     </>

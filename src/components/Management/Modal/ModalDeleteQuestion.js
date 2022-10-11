@@ -27,12 +27,13 @@ export const ModalDeleteQuestion = (props) => {
 
 
   const delQuestion = async (id) => {
-    props.setStateDelete(setStateDelete => !setStateDelete)
     props.setModalDel(false)
     setBackDrop(true);
     try {
       const response = await questionApi.deleteQuestion(id);
     } catch (error) {}
+    props.setStateDelete(setStateDelete => !setStateDelete)
+
     setBackDrop(false);
   };
 

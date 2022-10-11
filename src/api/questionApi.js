@@ -63,4 +63,16 @@ export const questionApi = {
     };
     return axios.post(createNewQuestion, question, config);
   },
+  editQuestion: (dataQuestion, id) => {
+    return axios.patch(
+      updateQuestionApi + id,
+        dataQuestion,
+        {
+            headers: {
+                'Authorization': `bearer ${LocalStorageService.getAccessToken(
+                  "access_token")}`
+            },
+        }
+    )
+}
 };
